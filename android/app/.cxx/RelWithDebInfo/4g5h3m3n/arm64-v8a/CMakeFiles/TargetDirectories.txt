@@ -1,0 +1,2 @@
+D:/meditime/android/app/.cxx/RelWithDebInfo/4g5h3m3n/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/meditime/android/app/.cxx/RelWithDebInfo/4g5h3m3n/arm64-v8a/CMakeFiles/rebuild_cache.dir

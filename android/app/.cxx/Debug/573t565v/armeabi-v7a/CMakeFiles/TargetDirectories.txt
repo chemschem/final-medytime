@@ -1,0 +1,2 @@
+D:/meditime/android/app/.cxx/Debug/573t565v/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/meditime/android/app/.cxx/Debug/573t565v/armeabi-v7a/CMakeFiles/rebuild_cache.dir
