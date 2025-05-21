@@ -4,7 +4,7 @@ import 'package:meditime/core/theme/colors.dart';
 class ConfirmedDialog extends StatelessWidget {
   final int turnNumber; // المتغير الخاص برقم الدور
 
-   ConfirmedDialog({super.key, required this.turnNumber});
+   const ConfirmedDialog({super.key, required this.turnNumber});
 
   @override
   Widget build(BuildContext context) {

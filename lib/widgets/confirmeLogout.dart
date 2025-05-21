@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:meditime/core/theme/colors.dart';
 
 
-class ConfirmDialog extends StatelessWidget {
+class ConfirmLogout extends StatelessWidget {
   final String date;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
 
-  const ConfirmDialog({
+  const ConfirmLogout({
     super.key,
     required this.date,
     required this.onConfirm,
@@ -30,7 +30,7 @@ class ConfirmDialog extends StatelessWidget {
             children: [
               const SizedBox(height: 50),
               const Text(
-                "Are you sure you want to book in this date?",
+                "Are you sure you want to logout?",
                 textAlign: TextAlign.center,
                     style: TextStyle(color: AppColors.textColor,fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -47,10 +47,10 @@ class ConfirmDialog extends StatelessWidget {
                   ElevatedButton(
                     onPressed: onConfirm,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor,
                     ),
-                    child: const Text("confirm",
-                      style: TextStyle(color: AppColors.backgroundPrimary,fontSize: 18, fontWeight: FontWeight.bold),
+                    child: Text("Logout",
+                      // ignore: deprecated_member_use
+                      style: TextStyle(color: Colors.red ,fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

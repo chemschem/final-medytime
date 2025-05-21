@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:meditime/api/function_date.dart';
 import 'package:meditime/api/globals.dart' as globals;
+import 'package:meditime/pages/assistant_pages/DayDetailsPage.dart';
 
 class function_appoint{
 
-Future<int> getNextOrderNumber(String id_dayClicked) async {
+Future<int> getNextOrderNumber(String idDayclicked) async {
   QuerySnapshot query = await FirebaseFirestore.instance
       .collection('appointments')
-      .where('id_date', isEqualTo: id_dayClicked)
+      .where('id_date', isEqualTo: idDayclicked)
       .get();
   // Order = Number of existing users on that date + 1
   return query.docs.length + 1;
@@ -23,6 +26,8 @@ Future<List<Map<String, dynamic>>> fetchMyAppointments() async {
     return query.docs.map((doc) => { // Convert each document to a map
       'id_date': doc['id_date'],
       'order': doc['order'],
+      'consultinDone': doc['consultinDone'],
+
     }).toList();// Convert the list of maps to a list
   } catch (e) {
     print('Error fetching appointments: $e');
@@ -73,22 +78,31 @@ Future<List<bool>> fetchBookingLimits(String dateId) async {//fetchBookingLimits
   //This prevents unnecessary calls and ensures we only fetch data once when needed.
 
 }
-Future<String> fetchUsersHaveBooked(String id_dayClicked) async {
+Future<int> fetchUsersHaveBooked(String idDayclicked) async {
   QuerySnapshot query = await FirebaseFirestore.instance
       .collection('dates')
-      .where('id_date', isEqualTo: id_dayClicked)
+      .where('id_date', isEqualTo: idDayclicked)
       .get(); 
   // Assuming the `usersHaveBooked` field exists in the document
-  return query.docs.first['usersHaveBooked'].toString();
+  return query.docs.first['usersHaveBooked'];
 
 }
-Future<String> fetchUsersWaiting(String id_dayClicked) async {
+Future<int> fetchUsersWaiting(String idDayclicked) async {
   QuerySnapshot query = await FirebaseFirestore.instance
       .collection('dates')
-      .where('id_date', isEqualTo: id_dayClicked)
+      .where('id_date', isEqualTo: idDayclicked)
       .get(); 
   // Assuming the `usersHaveBooked` field exists in the document
-  return query.docs.first['usersWaiting'].toString();
+  return query.docs.first['usersWaiting'];
+}
+
+Future<bool> fetchConsultinDone(String idDayclicked) async {
+  QuerySnapshot query = await FirebaseFirestore.instance
+      .collection('appointments')
+      .where('id_date', isEqualTo: idDayclicked)
+      .where('consultinDone', isEqualTo: true) // Check the consultinDdone field ??
+      .get(); 
+  return query.docs.isNotEmpty; 
 }
 
 
@@ -108,12 +122,113 @@ Future<bool> ifBookedThisDay(String idDayClicked) async {
 }
 
 
+Future<void> checkAndGoToAppointments(BuildContext context, DateTime selectedDate) async {
+  Timestamp selectedTimestamp = Timestamp.fromDate(
+    DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
+  );
+
+  try {
+    // 1. جلب مستند التاريخ من مجموعة dates
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('dates')
+        .where('fullDate', isEqualTo: selectedTimestamp)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final dateDoc = querySnapshot.docs.first;
+      final idDate = dateDoc['id_date'];
+      final Map<String, dynamic> dateData = dateDoc.data() as Map<String, dynamic>;
+      dateData['id'] = idDate; // Add the document ID to the date data
+      print("📦 dateData: $dateData");
+
+      // 2. جلب معلومات التاريخ
+      final dateHelper = function_date();
+      String dateInfo = await dateHelper.fetchDate(idDate);
+
+      // 3. جلب جميع المواعيد لهذا التاريخ
+      QuerySnapshot appointmentsSnapshot = await FirebaseFirestore.instance
+          .collection('appointments')
+          .where('id_date', isEqualTo: idDate)
+          .get();
+
+      // 4. دمج كل موعد مع معلومات المستخدم المرتبطة به
+      List<Map<String, dynamic>> enrichedAppointments = [];
+
+      for (var doc in appointmentsSnapshot.docs) {
+        Map<String, dynamic> appointmentData = doc.data() as Map<String, dynamic>;
+        final userId = appointmentData['id_user'];
+
+        try {
+          DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+              .collection('user')
+              .doc(userId)
+              .get();
+
+          if (userSnapshot.exists) {
+            Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+            appointmentData['name'] = userData['name'] ?? 'no name';
+            appointmentData['email'] = userData['email'] ?? 'no email';
+            appointmentData['age'] = userData['age'] ?? 'no age';
+            appointmentData['phone'] = userData['phone'] ?? 'no phone';
+            appointmentData['address'] = userData['address'] ?? 'no address';
+
+
+          } else {
+            appointmentData['name'] = 'no name';
+            appointmentData['email'] = '---';
+            appointmentData['age'] = '---';
+            appointmentData['phone'] = '---';
+            appointmentData['address'] = '---';
+          }
+        } catch (e) {
+          appointmentData['name'] = 'خطأ في جلب الاسم';
+          appointmentData['email'] = '---';
+          appointmentData['age'] = '---';
+          appointmentData['phone'] = '---';
+          appointmentData['address'] = '---';
+        }
+
+        enrichedAppointments.add(appointmentData);
+      }
+
+      // في البداية، تم جلب بيانات الموعد من appointmentsSnapshot ووضعها في متغير appointmentData.
+      // ثم قمت بجلب بيانات المستخدم المرتبطة بالموعد، وإذا تم العثور عليها، أضفتها إلى appointmentData.
+      // بعدها، يتم إضافة appointmentData (التي تحتوي على بيانات الموعد بالإضافة إلى بيانات المستخدم) إلى قائمة enrichedAppointments.
+
+      // 5. الانتقال إلى صفحة التفاصيل
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DayDetailsPage(
+            dateInfo: dateInfo, // تم تحديث dateInfo هنا
+            dateData: dateData,
+            appointmentsAndUsers: enrichedAppointments,
+            appointments: appointmentsSnapshot.docs.map((doc) => doc.data()).toList(),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('no appointments found for this date')),
+      );
+    }
+  } catch (e) {
+    print("error: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('error fetching appointments: $e')),
+    );
+  }
+}
+
+
+
+
 // ----------------------assistant ----------------------------------------------------------
-Future<void> deleteAppoointAssaigndwithDay(String id_dayClicked) async {
+Future<void> deleteAppoointAssaigndwithDay(String idDayclicked) async {
   try {
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('appointments')
-        .where('id_date', isEqualTo: id_dayClicked)
+        .where('id_date', isEqualTo: idDayclicked)
         .get();
     for (var doc in query.docs) {
       await doc.reference.delete();

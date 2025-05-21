@@ -17,6 +17,7 @@ class _signup_pageState extends State<signup_page> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
+  final TextEditingController _addressteController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
@@ -68,7 +69,7 @@ class _signup_pageState extends State<signup_page> {
                     builder: (context, child) {
                       return Theme(
                         data: Theme.of(context).copyWith(
-                          colorScheme: ColorScheme.light(
+                          colorScheme: const ColorScheme.light(
                             primary: AppColors.primaryColor,
                             onPrimary: AppColors.backgroundPrimary,
                             onSurface: AppColors.textColor,
@@ -96,7 +97,11 @@ class _signup_pageState extends State<signup_page> {
                   ),
                 ),
               ),
-
+              const SizedBox(height: 10),
+              CustomTextField(
+                controller: _addressteController,
+                labelText: "Address",
+              ),
               const SizedBox(height: 10),
               CustomTextField(
                 controller: _passwordController,
@@ -146,6 +151,7 @@ class _signup_pageState extends State<signup_page> {
                       name: _fullNameController.text,
                       age: _birthDateController.text,
                       phone: int.tryParse(_phoneController.text) ?? 0,
+                      address: _addressteController.text,
                       password: _passwordController.text,
                       email: _emailController.text,
                     );
@@ -159,11 +165,12 @@ class _signup_pageState extends State<signup_page> {
                     _passwordController.clear();
                     _confirmPasswordController.clear();
                     _emailController.clear();
+                    _addressteController.clear();
 
                     // التنقل إلى الصفحة الرئيسية أو تسجيل الدخول
                     Navigator.pushNamed(context, '/login_page');
                   },
-                  style: AppStyles.buttonStyle(AppColors.primaryColor),
+                  style: AppStyles.HomebuttonStyle(AppColors.primaryColor),
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(
@@ -181,7 +188,7 @@ class _signup_pageState extends State<signup_page> {
 
               TextButton(
                 onPressed: () => Navigator.pushNamed(context, '/login_page'),
-                child: Text(
+                child: const Text(
                   "Already have an account? Login",
                   style: TextStyle(
                     color: AppColors.primaryColor,

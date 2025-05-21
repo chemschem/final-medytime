@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppStyles {
   // ستايل زر تسجيل الدخول
   //static final ButtonStyle loginButtonStyle = ElevatedButton.styleFrom(
-  static ButtonStyle buttonStyle(Color color) {
+  static ButtonStyle HomebuttonStyle(Color color) {
     return ElevatedButton.styleFrom(
       backgroundColor: color,
       minimumSize: const Size(299, 78),
@@ -12,6 +12,17 @@ class AppStyles {
       ),
     );
   }
+
+  static ButtonStyle OtherbuttonStyle(Color color) {
+    return ElevatedButton.styleFrom(
+      backgroundColor: color,
+      minimumSize: const Size(100, 50),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+    );
+  }
+
   
   // Border Radius
   static const BorderRadius radius24 = BorderRadius.all(Radius.circular(24));
@@ -45,4 +56,12 @@ class AppStyles {
       offset: const Offset(0, 4),
     ),
   ];
+
+  static var text;
+
+  static var label;
+
+  static var title;
+
+  static var button;
 }

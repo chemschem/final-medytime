@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:meditime/api/function_session.dart';
 import 'package:meditime/core/theme/colors.dart';
-import 'package:meditime/pages/assistant_pages/settings/edit_clinic_info.dart';
-import 'package:meditime/widgets/confirmeLogout.dart';
-class setting_assistant extends StatelessWidget {
-  const setting_assistant({super.key});
+import 'package:meditime/pages/assistant_pages/settings/edit_defult_times.dart';
+import 'package:meditime/pages/assistant_pages/settings/edit_limits.dart';
+import 'package:meditime/pages/assistant_pages/show_archiv.dart';
+class additional_settings extends StatelessWidget {
+  const additional_settings({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class setting_assistant extends StatelessWidget {
         appBar: isLargeScreen
             ? null
             : AppBar(
-                automaticallyImplyLeading: false, // This removes the back arrow
+                automaticallyImplyLeading: false, // This removes the back arrows             
                 centerTitle: true,
                 backgroundColor: AppColors.primaryColor,
                 iconTheme: const IconThemeData(color: AppColors.whiteColor),
@@ -29,7 +29,7 @@ class setting_assistant extends StatelessWidget {
                 const SizedBox(
                   width: 200,
                   child: Drawer(
-                    child: Center(child: Text("General Settings")),
+                    child: Center(child: Text("Settings")),
                   ),
                 ),
               Expanded(
@@ -87,53 +87,35 @@ currentIndex: 2, // Set the current index to highlight the active tab
   Widget _buildSettingsList(BuildContext context) {
     return ListView(
       children: [
-        _buildSectionHeader('Settings'),
+        _buildSectionHeader('Additional settings'),
         _buildSettingItem(
-          icon: Icons.business,
-          title: 'Edit Clinic Information',
+          icon: Icons.numbers,
+          title: 'Paients limits',
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => edit_clinic_info()),
+              MaterialPageRoute(builder: (_) => edit_limits()),
             );
           },
         ),
        
         _buildSettingItem(
-          icon: Icons.language,
-          title: 'Change Language',
+          icon: Icons.hourglass_bottom,
+          title: 'Default times',
           onTap: () {
-            // Add language change logic later
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => edit_defult_times()),
+            );
           },
         ),
         _buildSettingItem(
-          icon: Icons.settings,
-          title: 'additional settings',
+          icon: Icons.archive,
+          title: 'Archive',
           onTap: () {
-            Navigator.pushNamed(context, '/additional_settings');
+          MaterialPageRoute(builder: (_) => const show_archiv());
           },
-        ),
-        const Divider(height: 40),
-        _buildSettingItem(
-  icon: Icons.logout,
-  title: 'Log Out',
-  iconColor: AppColors.errorColor,
-  textColor: AppColors.errorColor,
-  onTap: () {
-    final parentContext = context; // احفظ السياق الأساسي
-    showDialog(
-      context: parentContext,
-      builder: (dialogContext) => ConfirmLogout(
-        date: '', // احذفها إذا لم تكن مستخدمة
-        onCancel: () => Navigator.of(dialogContext).pop(),
-        onConfirm: () {
-          Navigator.of(dialogContext).pop();
-          function_session().logout(parentContext); // استخدم السياق المحفوظ
-        },
-      ),
-    );
-  },
-),
+        ),       
       ],
     );
   }

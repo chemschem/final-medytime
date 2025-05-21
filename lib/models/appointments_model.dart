@@ -7,13 +7,13 @@ class appointments_model {
 date_model id_date;
 user_model id_user;
 final int? order;
-bool? consultinDdone;
+bool? consultinDone;
 
   appointments_model({
     required this. id_date,
     required this.id_user,
     this.order,
-    this.consultinDdone,
+    this.consultinDone,
   });
 
   factory appointments_model.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ bool? consultinDdone;
        id_date: date_model.fromJson(json[' id_date']),
       id_user: user_model.fromJson(json['id_user']),
       order: json['order'],
-      consultinDdone: json['consultinDdone'],
+      consultinDone: json['consultinDone'],
     );
   }
   Map<String, dynamic> toJson() {
@@ -29,7 +29,7 @@ bool? consultinDdone;
       ' id_date':  id_date.toJson(),
       'id_user': id_user.toJson(),
       'order': order,
-      'consultinDdone': consultinDdone,
+      'consultinDone': consultinDone,
     };
   }
 }

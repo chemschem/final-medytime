@@ -4,15 +4,15 @@ import 'package:meditime/api/globals.dart' as globals;
 class function_archiv {
   
 
-Future<void> addDateToArchiv(String id_dayClicked) async {
+Future<void> addDateToArchiv(String idDayclicked) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       QuerySnapshot query = await FirebaseFirestore.instance
           .collection('dates')
-          .where('id_date', isEqualTo: id_dayClicked)
+          .where('id_date', isEqualTo: idDayclicked)
           .get();
       await firestore.collection('archiv').doc('${query.docs.first['id_date']}').set({
-        'id_date': id_dayClicked,
+        'id_date': idDayclicked,
         'day': query.docs.first['day'],
         'start': query.docs.first['start'],
         'end': query.docs.first['end'],
@@ -24,7 +24,7 @@ Future<void> addDateToArchiv(String id_dayClicked) async {
     }
   }
 
-  Future<void> addUserAndAppointmentsToArchiv(String id_dayClicked) async {
+  Future<void> addUserAndAppointmentsToArchiv(String idDayclicked) async {
   try {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentSnapshot userDoc = await firestore
@@ -38,7 +38,7 @@ Future<void> addDateToArchiv(String id_dayClicked) async {
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;//Convert the document data to a map for easy access
     await firestore
         .collection('archiv')
-        .doc(id_dayClicked)
+        .doc(idDayclicked)
         .collection('user')
         .doc(globals.currentUserId)
         .set({ // Add user data under the archiv 
@@ -48,13 +48,13 @@ Future<void> addDateToArchiv(String id_dayClicked) async {
     });
     QuerySnapshot appointmentQuery = await firestore
         .collection('appointments')
-        .where('id_date', isEqualTo: id_dayClicked)
+        .where('id_date', isEqualTo: idDayclicked)
         .where('id_user', isEqualTo: globals.currentUserId)
         .get();
     for (var appointment in appointmentQuery.docs) { //Loops through each appointment and saves it under the user’s archived record.
       await firestore
           .collection('archiv')
-          .doc(id_dayClicked)
+          .doc(idDayclicked)
           .collection('user')
           .doc(globals.currentUserId)
           .collection('appointments')

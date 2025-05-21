@@ -114,7 +114,7 @@ class _login_pageState extends State<login_page> {
                     emailController.clear();
                     passwordController.clear();
                   },
-                  style: AppStyles.buttonStyle(AppColors.primaryColor),
+                  style: AppStyles.HomebuttonStyle(AppColors.primaryColor),
                   child: const Text(
                     'Login',
                     style: TextStyle(

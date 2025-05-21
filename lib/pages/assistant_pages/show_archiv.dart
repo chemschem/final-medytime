@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meditime/api/function_archiv.dart';
 
 class show_archiv extends StatefulWidget {
-  const show_archiv({Key? key}) : super(key: key);
+  const show_archiv({super.key});
 
   @override
   _show_archivState createState() => _show_archivState();
@@ -11,20 +11,20 @@ class _show_archivState extends State<show_archiv> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text('Archive Data')),
+    appBar: AppBar(title: const Text('Archive Data')),
     body: Column(
       children: [
-        Text('this data is saved even though you delete the appointments'),
+        const Text('this data is saved even though you delete the appointments'),
         Expanded(
           child: FutureBuilder<List<Map<String, dynamic>>>(
         future: function_archiv().fetchArchivData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           } else {
             List<Map<String, dynamic>> archivData = snapshot.data!;
             return ListView.builder(

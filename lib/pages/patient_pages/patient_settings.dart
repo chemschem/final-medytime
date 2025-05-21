@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meditime/api/function_session.dart';
 import 'package:meditime/core/theme/colors.dart';
-import 'package:meditime/pages/assistant_pages/settings/edit_clinic_info.dart';
+import 'package:meditime/pages/patient_pages/patient_profil.dart';
 import 'package:meditime/widgets/confirmeLogout.dart';
-class setting_assistant extends StatelessWidget {
-  const setting_assistant({super.key});
+class patient_settings extends StatelessWidget {
+  const patient_settings({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +18,7 @@ class setting_assistant extends StatelessWidget {
             ? null
             : AppBar(
                 automaticallyImplyLeading: false, // This removes the back arrow
-                centerTitle: true,
                 backgroundColor: AppColors.primaryColor,
-                iconTheme: const IconThemeData(color: AppColors.whiteColor),
               ),
         body: SafeArea(
           child: Row(
@@ -54,26 +52,21 @@ class setting_assistant extends StatelessWidget {
           icon: Icon(Icons.home),
           label: 'Home',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Calendar',
-        ),
+        
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
           label: 'Settings',
         ),
       ],
-currentIndex: 2, // Set the current index to highlight the active tab
+currentIndex: 1, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {
-          Navigator.pushNamed(context, '/home_assistant');
+          Navigator.pushNamed(context, '/home_patient');
         } else if (index == 1) {
-          Navigator.pushNamed(context, '/show_calendar');
-        } else if (index == 2) {
-          Navigator.pushNamed(context, '/setting_assistant');
+          Navigator.pushNamed(context, '/patient_settings');
         }
         
 
@@ -87,14 +80,14 @@ currentIndex: 2, // Set the current index to highlight the active tab
   Widget _buildSettingsList(BuildContext context) {
     return ListView(
       children: [
-        _buildSectionHeader('Settings'),
+        _buildSectionHeader('General Settings'),
         _buildSettingItem(
-          icon: Icons.business,
-          title: 'Edit Clinic Information',
+          icon: Icons.person,
+          title: 'Profile',
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => edit_clinic_info()),
+              MaterialPageRoute(builder: (_) => PatientProfil()),
             );
           },
         ),
@@ -110,11 +103,11 @@ currentIndex: 2, // Set the current index to highlight the active tab
           icon: Icons.settings,
           title: 'additional settings',
           onTap: () {
-            Navigator.pushNamed(context, '/additional_settings');
+            //
           },
         ),
         const Divider(height: 40),
-        _buildSettingItem(
+       _buildSettingItem(
   icon: Icons.logout,
   title: 'Log Out',
   iconColor: AppColors.errorColor,
@@ -134,6 +127,7 @@ currentIndex: 2, // Set the current index to highlight the active tab
     );
   },
 ),
+
       ],
     );
   }

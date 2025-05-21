@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:meditime/api/functionFCM_token.dart'; 
+import 'package:meditime/api/functionFCM_token.dart';
+import 'package:meditime/core/theme/colors.dart'; 
 
 class notifications_patient extends StatefulWidget {
-  const notifications_patient({Key? key}) : super(key: key);
+  const notifications_patient({super.key});
 
   @override
   notifications_patientState createState() => notifications_patientState();
@@ -35,12 +36,17 @@ class notifications_patientState extends State<notifications_patient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("notifications"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+        
+        backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
         ),
-      ),
+        title: const Text("notifications", 
+        style: TextStyle(color: Colors.white,
+        fontWeight: FontWeight.bold),      
+      ),),
+      
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('notifications')

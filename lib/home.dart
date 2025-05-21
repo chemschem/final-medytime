@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meditime/core/theme/fonts.dart';
 import 'core/theme/colors.dart';
 import 'core/theme/styles.dart';
 
@@ -19,30 +20,30 @@ class Home extends StatelessWidget {
 
               Image.asset(
                 'assets/images/logo.png',
-                width: 150,
-                height: 150,
+                width: 180,
+                height: 180,
               ),
 
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 "Welcome to MEDITIME!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: AppFonts.headlineMedium.fontSize,
                   color: AppColors.textColor,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.2,
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 7),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Let’s make healthcare simpler,\none appointment at a time!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: AppFonts.bodyLarge.fontSize,
                     // ignore: deprecated_member_use
                     color: AppColors.textColor.withOpacity(0.8),
                     height: 1.4,
@@ -70,11 +71,11 @@ class Home extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, "/login_page");
                       },
-                      style: AppStyles.buttonStyle(AppColors.primaryColor),
+                      style: AppStyles.HomebuttonStyle(AppColors.primaryColor),
                       child: const Text(
                         "Login",
-                        style: TextStyle(
-                          fontSize: 28,
+                       style: TextStyle(
+                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: AppColors.backgroundPrimary,
                         ),
@@ -85,7 +86,7 @@ class Home extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, "/signup_page");
                       },
-                      style: AppStyles.buttonStyle(AppColors.backgroundSecondary),
+                      style: AppStyles.HomebuttonStyle(AppColors.backgroundSecondary),
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
@@ -96,21 +97,7 @@ class Home extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "test");
-                      },
-                      style: AppStyles.buttonStyle(AppColors.primaryColor),
-                      icon: const Icon(Icons.read_more, color: Colors.white),
-                      label: const Text(
-                        "Test Firebase",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                   
                   ],
                 ),
               ),

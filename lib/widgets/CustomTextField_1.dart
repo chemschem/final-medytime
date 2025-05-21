@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/colors.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField_1 extends StatelessWidget {
   final TextEditingController controller;
     final bool isadd;
 
   final String labelText;
   final bool obscureText;
   final Widget? suffixIcon; // ✅ جديد
-  const CustomTextField({
+  const CustomTextField_1({
     super.key,
     required this.controller,
     required this.labelText,
@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 328,
+      width: 500,
       height: 78,
       child: TextField(
         controller: controller,

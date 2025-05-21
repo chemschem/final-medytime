@@ -1,24 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:meditime/api/function_date.dart';
 import 'package:meditime/core/theme/colors.dart';
-import 'package:meditime/api/function_session.dart';
 
-class home_assistant extends StatelessWidget {
-  const home_assistant({Key? key}) : super(key: key);
+class home_assistant extends StatefulWidget {
+  const home_assistant({super.key});
+
+  @override
+  State<home_assistant> createState() => _home_assistantState();
+}
+
+class _home_assistantState extends State<home_assistant> {
+  //updating dates
+  // This function will be called when the widget is first created
+  @override
+  void initState() {
+    super.initState();
+    function_date().deleteOldDates();// This will delete old dates
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+          automaticallyImplyLeading: false, // This removes the back arrow
         title: const Text(
-          'Home Assistant',
+          'Home',
           style: TextStyle(
-            color: AppColors.whiteColor,
-            fontWeight: FontWeight.bold,
+          color: AppColors.whiteColor,
+          fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.primaryColor,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.whiteColor),
       ),
@@ -30,26 +45,75 @@ class home_assistant extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                
+Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundSecondary,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                 child: Padding(
+      padding: const EdgeInsets.all(100.0), // Adjust the value as needed
+      child: Image.asset(
+        "assets/images/logo.png",
+        fit: BoxFit.contain,
+        width: 200,
+      ),
+    ),
+                ),
+              ),
                 Wrap(
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    _buildCard(context, 'Show Booked Appointments', Icons.event_note, '/show_appoint'),
-                    _buildCard(context, 'Add Weekly Appointments', Icons.calendar_today, '/add_weekly_appoint'),
-                    _buildCard(context, 'Add Monthly Appointments', Icons.calendar_month, '/add_monthly_appoint'),
-                    _buildCard(context, 'Dates To Be Confirmed', Icons.watch_later_outlined, '/show_dates_assist'),
-                    _buildCard(context, 'Archive', Icons.archive, '/show_archiv'),
-                    _buildCard(context, 'Settings', Icons.settings, '/setting_assistant'),
-                    _buildCard(context, 'Show Weekly Appointments', Icons.view_week, '/show_weekly_appoint'),
+                    _buildCard(context, 'Add Appointments', Icons.calendar_today, '/add_weekly_appoint'),
+                    _buildCard(context, 'Appointments', Icons.view_week, '/show_calendar'),
                     _buildCard(context, 'Consulting', Icons.chat_bubble_outline, '/consulting'),
                   ],
                 ),
+
+
+            
+
+
+
                 const SizedBox(height: 20),
                 _buildLogoutCard(context),
               ],
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: 0, // Set the current index to highlight the active tab
+        selectedItemColor: Colors.blue, // Color for the selected item
+        unselectedItemColor: Colors.grey, // Color for unselected items
+        onTap: (index) {
+          // Handle navigation based on the selected index
+          if (index == 0) {
+            // Stay on the current page
+          } else if (index == 1) {
+            Navigator.pushNamed(context, '/show_calendar');
+          } else if (index == 2) {
+            Navigator.pushNamed(context, '/setting_assistant');
+          }
+        },
       ),
     );
   }
@@ -61,15 +125,15 @@ class home_assistant extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        splashColor: AppColors.primary.withOpacity(0.2),
-        highlightColor: AppColors.primary.withOpacity(0.1),
+        splashColor: AppColors.primaryColor.withOpacity(0.2),
+        highlightColor: AppColors.primaryColor.withOpacity(0.1),
         onTap: () => Navigator.pushNamed(context, route),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: AppColors.primary),
+              Icon(icon, color: AppColors.primaryColor),
               const SizedBox(width: 12),
               Text(
                 title,
@@ -92,30 +156,7 @@ class home_assistant extends StatelessWidget {
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        splashColor: Colors.red.withOpacity(0.2),
-        highlightColor: Colors.red.withOpacity(0.1),
-        onTap: () => function_session().logout(context),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.logout, color: Colors.red),
-              SizedBox(width: 12),
-              Text(
-                'Logout',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      
     );
   }
 }

@@ -5,9 +5,9 @@ class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
   const CustomBottomNavBar({
-    Key? key,
+    super.key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   void _navigateTo(int index, BuildContext context) {
     switch (index) {

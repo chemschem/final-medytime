@@ -1,12 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:meditime/api/function_appoint.dart';
 import 'package:meditime/api/globals.dart' as globals;
+import 'package:meditime/models/clinic_model.dart';
 import 'package:meditime/models/user_model.dart';
 //import 'modify_date.dart';
 
 
 class api_functions {
+
+static Future<void> updateClinicInFirestore(clinic_model clinic) async {
+  if (clinic.id_clinic == null || clinic.id_clinic!.isEmpty) {
+    print('❌ clinic.id_clinic is null or empty');
+    return;
+  }
+
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    await firestore.collection('clinic').doc(clinic.id_clinic).update(clinic.toJson());
+  } catch (e) {
+    print('Error updating clinic: $e');
+  }
+}
+
+
+
+
+
+
+
+
   static Future<void> addUserToFirestore(user_model user) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -19,37 +41,35 @@ class api_functions {
     }
   }
   
- Future<void> addUserToAppoint(String id_dayClicked) async {
-  try {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-     QuerySnapshot query = await FirebaseFirestore.instance
-        .collection('dates')
-        .where('id_date', isEqualTo: id_dayClicked)
-        .get();
-      await firestore.collection('appointments').doc('${query.docs.first['id_date']}_${globals.currentUserId}').set({
-        'id_date': id_dayClicked,
-        'id_user': globals.currentUserId,
-        'order': await function_appoint().getNextOrderNumber(id_dayClicked),
-        'consultinDdone': false,
+ Future<void> addUserToAppoint(String idDayClicked) async {
+  final firestore = FirebaseFirestore.instance;
+  final dateDoc = (await firestore
+      .collection('dates')
+      .where('id_date', isEqualTo: idDayClicked)
+      .get())
+      .docs
+      .first;
+
+  final docRef = firestore
+      .collection('appointments')
+      .doc('${idDayClicked}_${globals.currentUserId}');
+
+  await docRef.set({
+    'id_date': idDayClicked.toString(),
+  'id_user': globals.currentUserId.toString(),
+  'order': int.parse(dateDoc['usersHaveBooked'].toString()) + 1,
+  'consultinDone': false,
+  });
+
+  await firestore
+      .collection('dates')
+      .doc(dateDoc.id)
+      .update({
+        'usersHaveBooked': FieldValue.increment(1),
+        'usersWaiting': FieldValue.increment(1),
       });
-       await firestore
-          .collection('dates')
-          .doc(query.docs.first.id)
-          .update({
-        'usersHaveBooked':await function_appoint().getNextOrderNumber(id_dayClicked)-1,
-      });
-      await firestore
-          .collection('dates')
-          .doc(query.docs.first.id)
-          .update({
-        'usersWaiting': await function_appoint().getNextOrderNumber(id_dayClicked) - 1,
-      });
-      print('User added to appointUser collection successfully!');
-      print('consultinDdone value: ${query.docs.first['consultinDdone']}');
-    } catch (e) {
-      print('Error adding user to appoint: $e');
-    }
-  }
+}
+
 
 Future<Map<String, List<String>>> groupAppointmentsByDate() async {
   // key string: id_day , value list of id_user
@@ -70,6 +90,9 @@ Future<Map<String, List<String>>> groupAppointmentsByDate() async {
   return groupedData;
   //The number of lists inside the map equals the number of unique dates (id_date) in the appointUser collection.
 }
+
+
+// تم الاستغناء عن هذه الدالة 
 Future<Map<String, List<Map<String, dynamic>>>> getAppointByDateOrder() async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('appointments').get();
  //group the data by date and order
@@ -105,5 +128,29 @@ Future<Map<String, List<Map<String, dynamic>>>> getAppointByDateOrder() async {
   }
   return groupedData;
 }
+ 
+ //fetch current user
+Future<String> fetchCurrentUser() async {
+  final doc = await FirebaseFirestore.instance.collection('user').doc(globals.currentUserId).get();
+  return doc['name'] ?? 'User';
+}
+Future<Map<String, dynamic>> fetchUser() async {
+  final doc = await FirebaseFirestore.instance.collection('user').doc(globals.currentUserId).get();
+  if (doc.exists) {
+    return doc.data() as Map<String, dynamic>; // Return all fields as a map
+  } else {
+    throw Exception('User not found');
+  }
+}
+
+Future<void> updateUserData(Map<String, dynamic> updatedData) async {
+  await FirebaseFirestore.instance
+      .collection('user')
+      .doc(globals.currentUserId)
+      .update(updatedData);
+}
+
+
+
 }
 //end class api_functions

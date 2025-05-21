@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 class function_session{
 
  Future<bool> login(String email, String password, BuildContext context) async {
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     if (email.isEmpty || password.isEmpty) {
       _showMessage(context, "Please enter email and password");
       return false;
     }
 
     try {
-      var userQuery = await _firestore
+      var userQuery = await firestore
           .collection("user")
           .where("email", isEqualTo: email)
           .where("password", isEqualTo: password)
