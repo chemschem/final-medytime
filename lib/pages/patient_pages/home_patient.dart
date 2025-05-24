@@ -99,7 +99,7 @@ class _home_patientState extends State<home_patient> {
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundSecondary,
+                  color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
@@ -160,6 +160,8 @@ class _home_patientState extends State<home_patient> {
         currentIndex: 0, // Set the current index to highlight the active tab
         selectedItemColor: Colors.blue, // Color for the selected item
         unselectedItemColor: Colors.grey, // Color for unselected items
+               backgroundColor: AppColors.backgroundPrimary,
+
         onTap: (index) {
           // Handle navigation based on the selected index
           if (index == 0) {

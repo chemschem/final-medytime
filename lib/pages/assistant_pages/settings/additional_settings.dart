@@ -66,6 +66,8 @@ class additional_settings extends StatelessWidget {
 currentIndex: 2, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
+               backgroundColor: AppColors.backgroundColor,
+
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {
@@ -111,11 +113,14 @@ currentIndex: 2, // Set the current index to highlight the active tab
         ),
         _buildSettingItem(
           icon: Icons.archive,
-          title: 'Archive',
+          title: 'Achived appointments',
           onTap: () {
-          MaterialPageRoute(builder: (_) => const show_archiv());
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => show_archiv()),
+            );
           },
-        ),       
+        ),     
       ],
     );
   }

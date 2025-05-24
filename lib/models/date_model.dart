@@ -2,9 +2,9 @@
 class date_model {
   final String? id_date;
   final String? day;  
-  final int? start;
-  final int? end;
-  final int? limit;
+  final String? start;
+  final String? end;
+  final String? limit;
   final DateTime? fullDate;
   final int? usersHaveBooked;
   final int? usersWaiting;

@@ -47,6 +47,12 @@ class ConfirmLogout extends StatelessWidget {
                   ElevatedButton(
                     onPressed: onConfirm,
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: const BorderSide(color: Colors.red, width: 2),
+                      ),
+                      minimumSize: const Size(100, 50),
                     ),
                     child: Text("Logout",
                       // ignore: deprecated_member_use

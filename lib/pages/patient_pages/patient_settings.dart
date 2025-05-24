@@ -61,6 +61,8 @@ class patient_settings extends StatelessWidget {
 currentIndex: 1, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
+                      backgroundColor: AppColors.backgroundPrimary,
+
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {

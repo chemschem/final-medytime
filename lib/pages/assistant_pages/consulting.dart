@@ -129,7 +129,7 @@ class _consultingState extends State<consulting> {
     return InputDecoration(
       hintText: 'search patient..',
       hintStyle: const TextStyle(color: AppColors.textColor),
-      prefixIcon: const Icon(Icons.search, color: AppColors.secondaryColor),
+      prefixIcon: const Icon(Icons.search, color: AppColors.backgroundColor),
       filled: true,
       fillColor: AppColors.backgroundColor,
       contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
@@ -294,6 +294,8 @@ class _consultingState extends State<consulting> {
 currentIndex: 1, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
+               backgroundColor: AppColors.backgroundColor,
+
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {

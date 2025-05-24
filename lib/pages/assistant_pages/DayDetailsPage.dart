@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meditime/api/function_appoint.dart';
 import 'package:meditime/api/function_date.dart';
 import 'package:meditime/core/theme/colors.dart';
+import 'package:meditime/widgets/ModifyDeleteDialogs.dart';
+import 'package:meditime/widgets/showMessage.dart';
 
 class DayDetailsPage extends StatefulWidget {
   final String dateInfo;
@@ -68,7 +70,7 @@ class _DayDetailsPageState extends State<DayDetailsPage> {
     return InputDecoration(
       hintText: 'search patient..',
       hintStyle: const TextStyle(color: AppColors.textColor),
-      prefixIcon: const Icon(Icons.search, color: AppColors.secondaryColor),
+      prefixIcon: const Icon(Icons.search, color: AppColors.backgroundColor),
       filled: true,
       fillColor: AppColors.backgroundColor,
       contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
@@ -113,70 +115,52 @@ class _DayDetailsPageState extends State<DayDetailsPage> {
                       icon: const Icon(Icons.edit, color: Colors.blue),
                       tooltip: 'update appointment',
                       onPressed: () async {
-                        final id = widget.dateData['id_date'];
-                        final day = widget.dateData['day'];
-                        final start = widget.dateData['start'];
-                        final end = widget.dateData['end'];
-                        final limit = widget.dateData['limit'];
+                       final id = widget.dateData['id_date'];
+final day = widget.dateData['day'];
+final start = int.tryParse(widget.dateData['start'].toString()) ?? 9;
+final end = int.tryParse(widget.dateData['end'].toString()) ?? 17;
+final limit = int.tryParse(widget.dateData['limit'].toString()) ?? 10;
+
 
                         if (id == null || day == null || start == null || end == null || limit == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('error: missing date data')),
-                          );
-                          return;
-                        }
+  print("id: $id, day: $day, start: $start, end: $end, limit: $limit");
+  ShowMessage.showError(context, "error: missing date data.");
+  return;
+}
 
-                        bool? updated = await function_date().showModifyDialog(
-                          context,
-                          id,
-                          day,
-                          start,
-                          end,
-                          limit,
-                        );
+                       bool? updated = await function_date().showModifyDialog(
+                        context,
+                        id,
+                        day,
+                        start,
+                        end,
+                        limit,
+                      );
+                      
 
                         if (updated == true) {
                           await _fetchAndSetDateInfo(); 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('appointment updated successfully')),
-                          );
+                          ShowMessage.showValid(context, "appointment updated successfully.");                         
                         }
                       },
                     ),
                     IconButton(
   icon: const Icon(Icons.delete, color: Colors.red),
   tooltip: 'delete appointment',
-  onPressed: () async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('confirm delete'),
-        content: const Text('sure you want to delete this appointment?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('delete'),
-          ),
-        ],
-      ),
-    );
+ onPressed: () async {
+  final confirmed = await ModifyDeleteDialogs.showDeleteConfirmationDialog(context);
 
-    if (confirmed == true) {
-      await function_date().deleteDate(widget.dateData['id_date']);
-      await function_appoint().deleteAppoointAssaigndwithDay(widget.dateData['id_date']);
-
-      if (mounted) {
-        Navigator.of(context).pop(); // العودة بعد الحذف
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('appoint deleted successfully')),
-        );
-      }
+  if (confirmed == true) {
+    await function_date().deleteDate(widget.dateData['id_date']);
+    await function_appoint().deleteAppoointAssaigndwithDay(widget.dateData['id_date']);
+    
+    if (context.mounted) {
+      ShowMessage.showValid(context, "Appointment deleted successfully.");
+      Navigator.pop(context);
     }
-  },
+  }
+},
+
 ),
 
                   ],

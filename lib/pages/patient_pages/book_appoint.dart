@@ -9,6 +9,8 @@ import 'package:meditime/widgets/confirme_dailog.dart';
 import 'package:meditime/widgets/confirmed_dailog.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+
+
 class book_appoint extends StatefulWidget {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   // Pass user ID from the login page to booking page here, but we dont need because we use a global var
@@ -68,6 +70,8 @@ void fetchUserAppointments() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            backgroundColor: AppColors.backgroundPrimary,
+
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,        
@@ -87,7 +91,8 @@ void fetchUserAppointments() async {
           ],
         ),
       ),
-      body:   StreamBuilder<QuerySnapshot>(
+      body:  
+       StreamBuilder<QuerySnapshot>(
       stream: function_date().getdate(),
           // StreamBuilder listens to changes in Firestore
               //Unlike FutureBuilder (which fetches data once), StreamBuilder listens for real-time changes in Firestore.
@@ -293,7 +298,7 @@ return Container(
   margin: const EdgeInsets.only(bottom: 20),
   padding: const EdgeInsets.all(16),
   decoration: BoxDecoration(
-    color: AppColors.backgroundSecondary,
+    color: AppColors.backgroundColor,
     borderRadius: BorderRadius.circular(15),
     boxShadow: [
       BoxShadow(
@@ -468,6 +473,7 @@ return ElevatedButton(
 
 
         bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColors.backgroundPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -485,6 +491,7 @@ return ElevatedButton(
         currentIndex: 1, // Set the current index to highlight the active tab
         selectedItemColor: Colors.blue, // Color for the selected item
         unselectedItemColor: Colors.grey, // Color for unselected items
+
         onTap: (index) {
           // Handle navigation based on the selected index
           if (index == 0) {

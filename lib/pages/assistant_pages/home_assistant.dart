@@ -50,7 +50,7 @@ Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundSecondary,
+                  color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
@@ -59,7 +59,7 @@ Container(
       child: Image.asset(
         "assets/images/logo.png",
         fit: BoxFit.contain,
-        width: 200,
+        width: 400,
       ),
     ),
                 ),
@@ -86,6 +86,7 @@ Container(
           ),
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -104,6 +105,7 @@ Container(
         currentIndex: 0, // Set the current index to highlight the active tab
         selectedItemColor: Colors.blue, // Color for the selected item
         unselectedItemColor: Colors.grey, // Color for unselected items
+        backgroundColor: AppColors.backgroundColor,
         onTap: (index) {
           // Handle navigation based on the selected index
           if (index == 0) {

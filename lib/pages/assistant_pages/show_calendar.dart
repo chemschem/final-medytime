@@ -69,7 +69,7 @@ class show_calendarState extends State<show_calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         title: const Text("Appointments", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.primaryColor,
@@ -211,6 +211,8 @@ Center(
 currentIndex: 1, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
+              backgroundColor: AppColors.backgroundColor,
+
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {

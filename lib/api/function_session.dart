@@ -1,13 +1,14 @@
  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meditime/api/globals.dart' as globals;
 import 'package:flutter/material.dart';
+import 'package:meditime/widgets/showMessage.dart';
 
 class function_session{
 
  Future<bool> login(String email, String password, BuildContext context) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     if (email.isEmpty || password.isEmpty) {
-      _showMessage(context, "Please enter email and password");
+     ShowMessage.showError(context, "Please enter email and password");
       return false;
     }
 
@@ -18,22 +19,19 @@ class function_session{
           .where("password", isEqualTo: password)
           .get();
       if (userQuery.docs.isNotEmpty) {
-        _showMessage(context, "Login Successful");
+         ShowMessage.showValid(context, "Login Successful");
         return true;
       } else {
-        _showMessage(context, "Invalid Email or Password");
+         ShowMessage.showError(context, "Invalid Email or Password");
         return false;
       }
     } catch (e) {
-      _showMessage(context, "Error: ${e.toString()}");
+       ShowMessage.showError(context, "Error: ${e.toString()}");
       return false;
     }
   }
-  void _showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
+ 
+
 
    Future<void> go_page(BuildContext context, String email, String password, String currentUserId) async {
     if(email == 'admin' && password == 'admin'){

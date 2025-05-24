@@ -54,7 +54,7 @@ class _appointment_state_patientState extends State<appointment_state_patient> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: const BoxDecoration(
-                  color: AppColors.backgroundSecondary,
+                  color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
@@ -83,7 +83,7 @@ class _appointment_state_patientState extends State<appointment_state_patient> {
 
                               color: appointment['consultinDone'] 
                                  ? AppColors.donestate
-                                 : AppColors.backgroundSecondary,
+                                 : AppColors.backgroundColor,
   
                               borderRadius: BorderRadius.circular(15),
                               boxShadow: [
@@ -213,35 +213,49 @@ class _appointment_state_patientState extends State<appointment_state_patient> {
             ),
 
             const SizedBox(height: 10),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 58,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/book_appoint");
-                  },
-                  style: AppStyles.OtherbuttonStyle(AppColors.primaryColor),
-                  child: const Text(
-                    "NEW APPOINTMENT",
-                    style: TextStyle(
-                      color: AppColors.backgroundPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  child: Container(
+    decoration: BoxDecoration(
+      color: AppColors.backgroundColor, // <-- Set your desired background color here
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 8,
+        ),
+      ],
+    ),
+    child: SizedBox(
+      width: double.infinity,
+      height: 58,
+     
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/book_appoint");
+        },
+        style: AppStyles.OtherbuttonStyle(AppColors.primaryColor),
+        child: const Text(
+          "NEW APPOINTMENT",
+          style: TextStyle(
+            color: AppColors.backgroundPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
+        ),
+      ),
+    ),
+  ),
+),
             const SizedBox(height: 10),
           ],
         ),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor:  AppColors.backgroundColor, // Set the background color of the bottom navigation bar
+        
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

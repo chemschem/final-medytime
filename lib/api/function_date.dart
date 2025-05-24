@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 import 'package:meditime/api/functionFCM_token.dart';
-import 'package:meditime/api/globals.dart' as globals;
 import 'package:meditime/models/date_model.dart';
 
 class function_date {
@@ -153,7 +152,14 @@ print('Formatted Date from fetchDate : $formattedDate');
 
   //Show Modify Dialog - Allows admin to modify appointment details
   // Show Modify Dialog - Allows admin to modify appointment details
-Future<bool?> showModifyDialog(BuildContext context, String docId, String currentDay, int currentStart, int currentEnd, int currentLimit) async {
+Future<bool?> showModifyDialog(
+  BuildContext context,
+  String docId,
+  String currentDay,
+  int currentStart,
+  int currentEnd,
+  int currentLimit,
+) async {
   TextEditingController controllerStart = TextEditingController(text: currentStart.toString());
   TextEditingController controllerEnd = TextEditingController(text: currentEnd.toString());
   TextEditingController controllerLimit = TextEditingController(text: currentLimit.toString());
@@ -161,30 +167,34 @@ Future<bool?> showModifyDialog(BuildContext context, String docId, String curren
   return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Modify Day'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: controllerStart,
-            decoration: const InputDecoration(labelText: 'New Start'),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: controllerEnd,
-            decoration: const InputDecoration(labelText: 'New End'),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: controllerLimit,
-            decoration: const InputDecoration(labelText: 'New Limit'),
-            keyboardType: TextInputType.number,
-          ),
-        ],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: Colors.white,
+      title: const Text(
+        'Modify Day',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildTextField(controllerStart, 'New Start'),
+            const SizedBox(height: 12),
+            _buildTextField(controllerEnd, 'New End'),
+            const SizedBox(height: 12),
+            _buildTextField(controllerLimit, 'New Limit'),
+          ],
+        ),
+      ),
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context, false), // إرجاع false عند الإلغاء
+          onPressed: () => Navigator.pop(context, false),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.grey[700],
+          ),
           child: const Text('Cancel'),
         ),
         ElevatedButton(
@@ -195,24 +205,45 @@ Future<bool?> showModifyDialog(BuildContext context, String docId, String curren
 
             if (newStart > 0 && newEnd > 0 && newLimit > 0) {
               bool islimitchanged = newLimit > currentLimit;
+
               await modifyDate(docId, {
                 'day': currentDay,
                 'start': newStart,
                 'end': newEnd,
-                'limit': newLimit
+                'limit': newLimit,
               }, islimitchanged);
 
-              Navigator.pop(context, true); // ✅ إرجاع true عند النجاح
+              Navigator.pop(context, true);
             } else {
-              Navigator.pop(context, false); // إرجاع false لو القيم غير صحيحة
+              Navigator.pop(context, false);
             }
           },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
           child: const Text('Save'),
         ),
       ],
     ),
   );
 }
+
+Widget _buildTextField(TextEditingController controller, String label) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    ),
+    keyboardType: TextInputType.number,
+  );
+}
+
 
 Future<void> deleteOldDates() async {
   try {

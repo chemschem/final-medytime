@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meditime/api/function_date.dart';
 import 'package:meditime/api/globals.dart' as globals;
 import 'package:meditime/pages/assistant_pages/DayDetailsPage.dart';
+import 'package:meditime/widgets/showMessage.dart';
 
 class function_appoint{
 
@@ -208,15 +209,12 @@ Future<void> checkAndGoToAppointments(BuildContext context, DateTime selectedDat
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no appointments found for this date')),
-      );
+      ShowMessage.showError(context, "no appointments found for this date");
     }
   } catch (e) {
     print("error: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('error fetching appointments: $e')),
-    );
+    ShowMessage.showError(context, 'error fetching appointments: $e');
+
   }
 }
 

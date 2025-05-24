@@ -57,7 +57,7 @@ class Home extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: const BoxDecoration(
-                  color: AppColors.backgroundSecondary,
+                  color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
@@ -86,7 +86,7 @@ class Home extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, "/signup_page");
                       },
-                      style: AppStyles.HomebuttonStyle(AppColors.backgroundSecondary),
+                      style: AppStyles.HomebuttonStyle(const Color.fromARGB(255, 255, 255, 255)),
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(

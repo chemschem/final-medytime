@@ -5,6 +5,7 @@ import 'package:meditime/api/globals.dart' as globals;
 import 'package:meditime/core/theme/colors.dart';
 import 'package:meditime/core/theme/styles.dart';
 import 'package:meditime/widgets/CustomTextField_1.dart';
+import 'package:meditime/widgets/showMessage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class add_monthly_appoint extends StatefulWidget {
@@ -221,9 +222,7 @@ Center(
       label: 'Add All Selected Days',
       onPressed: () async {
         if (selectedDates.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Please select at least one day.")),
-          );
+        ShowMessage.showError(context, "Please select at least one day.");
           return;
         }
 
@@ -233,9 +232,7 @@ Center(
         final description = descriptionController.text.trim();
 
         if (start.isEmpty || end.isEmpty || limit == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Please fill all time fields correctly.")),
-          );
+        ShowMessage.showError(context, "Please fill all time fields correctly.");
           return;
         }
 
@@ -257,10 +254,7 @@ Center(
           addedDates.addAll(newAdded);
           selectedDates.clear();
         });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Appointments added.")),
-        );
+                ShowMessage.showValid(context, "Appointments added.");
       },
     ),
   ),
@@ -308,6 +302,8 @@ Center(
 currentIndex: 1, // Set the current index to highlight the active tab
   selectedItemColor: Colors.blue, // Color for the selected item
   unselectedItemColor: Colors.grey, // Color for unselected items
+             backgroundColor: AppColors.backgroundColor,
+
        onTap: (index) {
         // Handle navigation based on the selected index
         if (index == 0) {

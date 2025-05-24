@@ -149,7 +149,7 @@ class clinicInfoState extends State<clinicInfo> {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

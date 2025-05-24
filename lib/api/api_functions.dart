@@ -52,10 +52,10 @@ static Future<void> updateClinicInFirestore(clinic_model clinic) async {
 
   final docRef = firestore
       .collection('appointments')
-      .doc('${idDayClicked}_${globals.currentUserId}');
+      .doc('${idDayClicked}_${globals.currentUserId}');//
 
   await docRef.set({
-    'id_date': idDayClicked.toString(),
+  'id_date': idDayClicked.toString(),
   'id_user': globals.currentUserId.toString(),
   'order': int.parse(dateDoc['usersHaveBooked'].toString()) + 1,
   'consultinDone': false,
